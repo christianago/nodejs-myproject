@@ -1,0 +1,28 @@
+html
+  head
+    title Εγγραφή | MyProject
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    link(rel='stylesheet', href='/bootstrap.min.css')
+    link(rel='stylesheet', href='/main.css')
+  body
+    div(class="alert alert-info text-center") Πραγματοποιήστε εγγραφή στο MyProject
+
+    div.container
+
+    if error
+      div(class="alert alert-danger text-center") #{error}
+     
+    if success
+      div(class="alert alert-success text-center") #{success}
+
+    form(class="auth-form mt-5 p-3 mx-auto" action='/register', method='POST')
+      .form-group
+        label Όνομα Χρήστη
+        input.form-control(type='text' name='username' required='')
+      .form-group
+        label Κωδικός
+        input.form-control(type='password' name='password' required='')
+      div.text-center
+        button.btn.btn-primary.submit-btn(type='submit') Εγγραφή
+      div.mt-5(style="text-align: center")
+        a(href="/login") Είσοδος

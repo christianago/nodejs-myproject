@@ -1,0 +1,138 @@
+html
+  head
+    title MyProject
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    link(rel='stylesheet', href='/bootstrap.min.css')
+    link(rel='stylesheet', href='/main.css')
+  body
+    script(src='/jquery.min.js') 
+    script(src='/bootstrap.min.js') 
+
+    div#new-book-modal.modal.hide.fade(role='dialog' aria-labelledby="myModalLabel" aria-hidden="true")
+        .modal-dialog
+            .modal-content
+              form(method='POST' action='/add' enctype="multipart/form-data")
+                .modal-header
+                    h5.modal-title Νέο βιβλίο
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                .modal-body
+                    div.row
+                        div.col-12
+                            label Τίτλος
+                            input.form-control(type="text", name="title" value="", required)
+                    div.row 
+                        div.col-12
+                            label Συγγραφέας
+                            input.form-control(type="text", name="author", value="", required)
+                    div.row 
+                        div.col-12
+                            label Εκδοτικός οίκος
+                            input.form-control(type="text", name="publisher", value="", required)
+                    div.row 
+                        div.col-12
+                            label Ετος έκδοσης
+                            input.form-control(type="number", name="release_year", value="", required)
+                    div.row 
+                        div.col-12
+                            label Εικόνα
+                            input.form-control(type="file" name="image")
+                .modal-footer
+                    button.btn.btn-secondary(type='button' data-dismiss='modal') Κλείσιμο
+                    button#add-book.btn.btn-primary(type='submit') Καταχώρηση
+
+    div.container
+       
+        nav.navbar.navbar-expand-lg.mb-3
+            a.navbar-brand(href='/home') My Project
+            button.navbar-toggler(type='button' data-target='#navbarNav' aria-controls='navbarNav' aria-expanded='false')
+                span.navbar-toggler-icon
+            #navbarNav
+                ul.navbar-nav
+                    li.nav-item
+                        a.nav-link(href='/home') Βιβλία
+                    li.nav-item
+                        a.nav-link(href='#!' data-toggle='modal' data-target='#new-book-modal') Νέο βιβλίο
+                    li.nav-item
+                        a#search.nav-link(href='#!') Αναζήτηση σε Open Library
+                    li 
+                        a.nav-link.logout(href="/logout") Αποσύνδεση
+
+        div.row
+            h4.col-12.text-center Βιβλία
+
+        form.row.search-wrap(action="/search", method="get" class=term ? 'visible' : '')
+            h5.col-12.text-center Αναζήτηση σε Open Library
+
+            div.col-8.text-right 
+                input.form-control(type="search" name="term", placeholder='Εισάγετε όρο αναζήτησης' value=term ? term : '')
+            div.col-4
+                button.btn.btn-primary(type="submit") Αναζήτηση
+
+        if success
+            div(class="alert alert-success text-center") #{success}
+
+        if !books || !books.length
+            div.row.mt-3.mb-3
+                div.col-12.alert.alert-danger.text-center Δε βρέθηκαν βιβλία
+
+        div.row.mt-3.mb-3
+            div.col-12.text-right
+                form(method="POST" action="/save")
+                    if !term && isAdmin
+                        button.btn.btn-success(type="submit") Αποθήκευση
+
+                    table.table.table-bordered.table-hover-table.striped.table-responsive.mt-3.mb-3
+                        thead.thead-dark 
+                            tr 
+                                th #
+                                th Εικόνα
+                                th Τίτλος
+                                th Συγγραφέας
+                                th Εκδοτικός οίκος
+                                th Έτος έκδοσης
+                                if !term
+                                    th Ημερομηνία
+                            tbody 
+                            each item in books
+                                tr 
+                                    td
+                                        if isAdmin
+                                            input.form-control(type="hidden", name='id' value=`${item.id}`)
+                                        else 
+                                            | #{item.id}
+                                    td
+                                        img(onerror="this.style.display='none'" src=`${item.image}`)
+                                    td
+                                        if isAdmin
+                                            input.form-control(type="text", name='title' value=item.title ? item.title : '')
+                                        else
+                                            | #{item.title}
+                                    td 
+                                        if isAdmin
+                                            input.form-control(type="text", name='author' value=item.author ? item.author : '')
+                                        else
+                                            | #{item.author}
+                                    td
+                                        if isAdmin
+                                            input.form-control(type="text", name='publisher' value=item.publisher ? item.publisher : '')
+                                        else
+                                            | #{item.publisher}
+                                    td
+                                        if isAdmin
+                                            input.form-control(type="number", name='release_year' value=item.release_year ? item.release_year : '')
+                                        else
+                                            | #{item.release_year}
+                                    td
+                                        if !term
+                                            | #{item.created ? moment(item.created).format("DD/MM/YYYY HH:mm:ss") : ''}
+
+script.
+    this.addEventListener('click', function(event) {
+        if (event.target.id === 'search') {
+            console.log(event)
+            var searchWraps = document.querySelectorAll('.search-wrap');
+            searchWraps.forEach(function(searchWrap) {
+                searchWrap.style.display = 'flex';
+            });
+        }
+    });

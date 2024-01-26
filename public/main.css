@@ -1,0 +1,48 @@
+html, body{
+  overflow-x: hidden;
+}
+
+.auth-form{
+  max-width: 450px;
+}
+
+.alert:empty{
+  display: none;
+}
+
+.logout{
+    position: absolute;
+    right: 25px;
+}
+
+#new-book-modal .modal-dialog{
+  background: #fff;
+}
+
+nav{
+  background: #483D8B;
+}
+
+nav a{
+  color: #fff !important;
+}
+
+table{
+  margin: 0 auto;
+  border: none;
+}
+
+table td img{
+  height: 100px;
+  width: auto;
+}
+
+.search-wrap{
+  display: none;
+  margin: 0 auto;
+  width: 500px;
+}
+
+.search-wrap.visible{
+  display: flex;
+}
