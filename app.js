@@ -19,16 +19,17 @@ const db = mysql2.createConnection({
 });
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(cookieParser());
 app.use(session({
   name : 'app.sid',
   secret: 'myproject',
   resave: false,
-  store: new RedisStore(),
+  httpOnly: true, 
+  secure: process.env.NODE_ENV === 'production',
   saveUninitialized: false,
-  cookie: {maxAge: 24*60*60*1000},
+  //cookie: {maxAge: 24*60*60*1000},
 }));
 
 app.use(flash());
