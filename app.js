@@ -8,8 +8,6 @@ const flash = require('connect-flash');
 const multer = require('multer');
 const fetch = require('node-fetch');
 const { createHash } = require('crypto');
-var FileStore = require('session-file-store')(session);
-var options = { dir: './sessions' }; 
 
 const db = mysql2.createConnection({
   host: "34.163.89.163",
@@ -29,7 +27,6 @@ app.use(session({
   httpOnly: true, 
   secure: process.env.NODE_ENV === 'production',
   saveUninitialized: false,
-  //cookie: {maxAge: 24*60*60*1000},
 }));
 
 app.use(flash());
@@ -128,7 +125,6 @@ app.get('/home', (req, res) => {
     res.redirect('/login');
   } else{
     const isAdmin = req.session.user.username === 'admin' ? true : false;
-    //const sel = queryObject.sel;
     let query = `SELECT * FROM books`;
     db.query(query, [], function (err, result, fields){
       if (err) throw err;
