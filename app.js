@@ -10,9 +10,9 @@ const fetch = require('node-fetch');
 const { createHash } = require('crypto');
 
 const db = mysql2.createConnection({
-  host: "192.168.1.96",
-  user: "kris_remote",
-  password: "botaki",
+  host: "34.163.89.163",
+  user: "myusr",
+  password: ">39]'EveHS}zR3Ai",
   database: 'myproject_db'
 });
 
