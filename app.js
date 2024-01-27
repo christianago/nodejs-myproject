@@ -26,7 +26,7 @@ app.use(session({
   name : 'app.sid',
   secret: 'myproject',
   resave: false,
-  store: new FileStore(options),
+  store: new RedisStore(),
   saveUninitialized: false,
   cookie: {maxAge: 24*60*60*1000},
 }));
