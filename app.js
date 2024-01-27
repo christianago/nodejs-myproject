@@ -8,6 +8,8 @@ const flash = require('connect-flash');
 const multer = require('multer');
 const fetch = require('node-fetch');
 const { createHash } = require('crypto');
+var FileStore = require('session-file-store')(session);
+var options = { dir: './sessions' }; 
 
 const db = mysql2.createConnection({
   host: "34.163.89.163",
@@ -16,23 +18,21 @@ const db = mysql2.createConnection({
   database: 'myproject_db'
 });
 
-const app = express()
-const port = 3000
+const app = express();
+const port = 3000;
 
-app.set('trust proxy', 1) 
 app.use(cookieParser());
-var MemoryStore = session.MemoryStore;
-
 app.use(session({
   name : 'app.sid',
   secret: 'myproject',
   resave: false,
-  store: new MemoryStore(),
-  saveUninitialized: true,
+  store: new FileStore(options),
+  saveUninitialized: false,
   cookie: {maxAge: 24*60*60*1000},
 }));
 
 app.use(flash());
+app.set('trust proxy', 1) 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json()); 
 app.use(express.static(path.join(__dirname, 'public')));
